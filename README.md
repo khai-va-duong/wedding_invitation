@@ -1,9 +1,10 @@
 # Thiệp Cưới Online — Wedding Invitation Site
 
 A self-contained, static Vietnamese wedding invitation website — envelope-opening intro,
-background music, countdown timer, couple/story/event sections, photo gallery with
-lightbox, gift/bank QR codes, and a wishes wall — plus **personalized invitation links**
-per guest (e.g. `/for/chi-lien-cung-nguoi-thuong` → "Kính mời chị Liên cùng người thương").
+background music, countdown timer, save-the-date calendar, family info + a personalized
+"Thư Mời Cưới" invitation letter, couple profiles, photo gallery with lightbox, gift/bank
+QR codes, and a wishes wall — plus **personalized invitation links** per guest (e.g.
+`/for/chi-lien-cung-nguoi-thuong` → "Kính mời chị Liên cùng người thương").
 
 No build step, no framework, no server required. Pure HTML/CSS/JS, ready to host on
 **GitHub Pages** for free.
@@ -12,8 +13,9 @@ No build step, no framework, no server required. Pure HTML/CSS/JS, ready to host
 
 Almost everything is in two files:
 
-- [`data/config.js`](data/config.js) — couple names, wedding date, ceremony schedule,
-  love story timeline, gallery images, bank/QR gift info, music file, and SEO text.
+- [`data/config.js`](data/config.js) — couple names, family/parents info, wedding date,
+  ceremony schedule, foreword letter, gallery images, bank/QR gift info, music file, and
+  SEO text.
 - [`data/guests.js`](data/guests.js) — the guest list that powers personalized links.
 
 Open each file and edit the values — they're plain JavaScript objects with comments
@@ -94,6 +96,7 @@ https://yoursite.com/for/chi-lien-cung-nguoi-thuong
 → page title / link-preview card: "Thân mời chị Liên | Ngày chung đôi"
    subtitle: "đến dự buổi tiệc chung vui cùng gia đình"
 → on-page greeting after opening the envelope: "Kính mời chị Liên cùng người thương"
+→ "Thư Mời Cưới" section further down: "TRÂN TRỌNG KÍNH MỜI CHỊ LIÊN CÙNG NGƯỜI THƯƠNG"
 ```
 
 This matters because apps like Zalo, Messenger, and Facebook generate their link-preview

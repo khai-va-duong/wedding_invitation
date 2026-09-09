@@ -8,6 +8,9 @@ window.SITE_CONFIG = {
       name: "Quang Khải",
       fullName: "Nguyễn Quang Khải",
       parents: "Ông Nguyễn Văn Khoa & Bà Trần Thị Hoa",
+      father: "Nguyễn Văn Khoa",
+      mother: "Trần Thị Hoa",
+      address: "SN 130A Đặng Quang - TDP 5, P. Quang Trung - Thanh Hóa",
       photo: "assets/img/groom.svg",
       quote: "Khoảnh khắc gặp được em, anh đã quyết định sẽ cùng em đi đến hết cuộc đời.",
       order: 1, // shown first
@@ -16,6 +19,9 @@ window.SITE_CONFIG = {
       name: "ABC Dương",
       fullName: "Lê ABC Dương",
       parents: "Ông Lê Văn Sơn & Bà Phạm Thị Lan",
+      father: "Lê Văn Sơn",
+      mother: "Phạm Thị Lan",
+      address: "Thôn Thanh Vòng, Xã Thanh Vân - Bắc Ninh",
       photo: "assets/img/bride.svg",
       quote: "Giữa thế gian huyên náo, anh là lý do để em mỉm cười mỗi ngày.",
       order: 2,
@@ -25,8 +31,6 @@ window.SITE_CONFIG = {
     // Small cover-page copy
     badge: "SWEET WEDDING",
     tagline: "Together Forever",
-    marryPrompt: "MARRY ME?",
-    marryAnswer: "YES! I DO",
     quote: "Hôn nhân là chuyện cả đời, yêu người vừa ý, cưới người mình thương.",
   },
 
@@ -66,12 +70,14 @@ window.SITE_CONFIG = {
     "Sự hiện diện của bạn sẽ là niềm vinh hạnh lớn lao và là món quà tinh thần tuyệt vời nhất đối với chúng mình.",
   ],
 
-  // Love story timeline (optional — leave the array empty to hide the section)
-  story: [
-    { year: "2020", title: "Gặp gỡ", text: "Hai người tình cờ quen nhau qua một người bạn chung." },
-    { year: "2022", title: "Hẹn hò", text: "Bắt đầu một hành trình yêu thương và thấu hiểu." },
-    { year: "2026", title: "Về chung một nhà", text: "Và hôm nay, chúng tôi quyết định gắn bó trọn đời." },
-  ],
+  // Shown in the "Thư Mời Cưới" invitation-letter block, after the guest's
+  // name (resolved from the /for/<slug> link — see data/guests.js).
+  invite: {
+    heading: "Thư Mời Cưới",
+    line1: "TRÂN TRỌNG KÍNH MỜI",
+    line2: "ĐẾN DỰ BUỔI TIỆC VÀ",
+    line3: "CHUNG VUI CÙNG GIA ĐÌNH CHÚNG TÔI!",
+  },
 
   gallery: [
     "assets/img/gallery/1.svg",

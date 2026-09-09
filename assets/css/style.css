@@ -3,16 +3,16 @@
    ========================================================================== */
 
 :root {
-  --color-bg: #fdf6ef;
-  --color-bg-alt: #f8e9d8;
+  --color-bg: #fffdfb;
+  --color-bg-alt: #fdf7f0;
   --color-surface: #ffffff;
-  --color-primary: #a3082a;      /* deep Chinese red */
-  --color-primary-dark: #6e0016;
-  --color-gold: #cda349;
-  --color-text: #3a2620;
-  --color-text-soft: #8a7568;
-  --color-line: #e8d3ae;
-  --shadow-soft: 0 10px 30px rgba(110, 0, 22, 0.14);
+  --color-primary: #7d2b34;      /* muted wine/maroon — used as an accent, not a fill */
+  --color-primary-dark: #5a1e26;
+  --color-gold: #b8935a;
+  --color-text: #3a2f2a;
+  --color-text-soft: #8a7d74;
+  --color-line: #ecdfd0;
+  --shadow-soft: 0 8px 24px rgba(90, 30, 38, 0.08);
   --radius-lg: 24px;
   --radius-md: 16px;
   --radius-sm: 10px;
@@ -51,6 +51,28 @@ h1, h2, h3 { font-family: var(--font-heading); margin: 0; color: var(--color-pri
   background: var(--color-bg);
   box-shadow: var(--shadow-soft);
   overflow: hidden;
+}
+
+/* Faint paper-grain texture behind every section that doesn't set its own
+   opaque background (hero/calendar/footer keep their own gradient). Kept
+   very low-opacity and cropped away from the source image's bolder brush
+   stroke so it reads as a subtle watermark, not a color block. */
+.container::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-image: url('../img/bg-paper-texture.jpg');
+  background-repeat: no-repeat;
+  background-position: left bottom;
+  background-size: cover;
+  opacity: 0.14;
+  pointer-events: none;
+}
+
+.container > * {
+  position: relative;
+  z-index: 1;
 }
 
 .section {
@@ -123,7 +145,10 @@ h1, h2, h3 { font-family: var(--font-heading); margin: 0; color: var(--color-pri
   display: flex;
   align-items: center;
   justify-content: center;
-  background: radial-gradient(circle at top, #7a0a1e 0%, #4c0010 100%);
+  background-image: url('../img/bg-pattern-top.jpg'), radial-gradient(circle at top, #fffdfb 0%, #f6e9da 100%);
+  background-repeat: no-repeat, no-repeat;
+  background-position: top center, center;
+  background-size: 100% auto, cover;
   transition: opacity 0.9s ease, visibility 0.9s ease;
 }
 #envelope.hidden {
@@ -139,7 +164,8 @@ h1, h2, h3 { font-family: var(--font-heading); margin: 0; color: var(--color-pri
   padding: 40px 24px;
   border: 1px solid var(--color-gold);
   border-radius: var(--radius-lg);
-  background: rgba(255, 235, 210, 0.08);
+  background: rgba(255, 255, 255, 0.7);
+  box-shadow: var(--shadow-soft);
   backdrop-filter: blur(2px);
   animation: float 4s ease-in-out infinite;
 }
@@ -162,14 +188,14 @@ h1, h2, h3 { font-family: var(--font-heading); margin: 0; color: var(--color-pri
 .envelope-greeting {
   font-family: var(--font-heading);
   font-size: 20px;
-  color: #f8e4d0;
+  color: var(--color-text);
   margin-bottom: 4px;
 }
 
 .envelope-names {
   font-family: var(--font-script);
   font-size: 46px;
-  color: var(--color-gold);
+  color: var(--color-primary);
   line-height: 1.1;
   margin: 10px 0;
 }
@@ -178,7 +204,7 @@ h1, h2, h3 { font-family: var(--font-heading); margin: 0; color: var(--color-pri
   margin-top: 22px;
   font-size: 13px;
   letter-spacing: 1px;
-  color: #e2c3ab;
+  color: var(--color-text-soft);
   text-transform: uppercase;
 }
 
@@ -189,7 +215,7 @@ h1, h2, h3 { font-family: var(--font-heading); margin: 0; color: var(--color-pri
   border: 1px solid var(--color-gold);
   border-radius: 30px;
   background: var(--color-gold);
-  color: #4c0010;
+  color: var(--color-primary-dark);
   font-weight: 700;
   letter-spacing: 1px;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -203,7 +229,10 @@ h1, h2, h3 { font-family: var(--font-heading); margin: 0; color: var(--color-pri
 #hero {
   padding: 72px 28px 56px;
   text-align: center;
-  background: linear-gradient(180deg, var(--color-bg-alt) 0%, var(--color-bg) 100%);
+  background-image: url('../img/bg-pattern-top.jpg'), linear-gradient(180deg, var(--color-bg-alt) 0%, var(--color-bg) 100%);
+  background-repeat: no-repeat, no-repeat;
+  background-position: top center, center;
+  background-size: 100% auto, cover;
 }
 
 .hero-eyebrow {
@@ -350,54 +379,114 @@ h1, h2, h3 { font-family: var(--font-heading); margin: 0; color: var(--color-pri
   background: var(--color-primary);
   color: #fdf1e6;
   font-weight: 700;
-  box-shadow: 0 0 0 3px rgba(163, 8, 42, 0.15);
+  box-shadow: 0 0 0 3px rgba(125, 43, 52, 0.15);
 }
 
-.flip-card {
-  perspective: 800px;
-  width: 220px;
-  height: 74px;
-  margin: 30px auto 0;
-}
+/* ==========================================================================
+   Date range + family panel + invitation letter ("Thư Mời Cưới")
+   ========================================================================== */
 
-.flip-inner {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  transform-style: preserve-3d;
-  animation: flip-card-cycle 7s ease-in-out infinite;
-}
-
-.flip-front, .flip-back {
-  position: absolute;
-  inset: 0;
+.date-range {
   display: flex;
   align-items: center;
   justify-content: center;
-  backface-visibility: hidden;
-  border-radius: var(--radius-md);
+  gap: 14px;
+  margin-bottom: 30px;
+}
+
+.date-range .xi-mark {
+  font-size: 34px;
+  color: var(--color-primary);
+  line-height: 1;
+}
+
+.date-range-text {
+  font-family: var(--font-heading);
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--color-text);
+  letter-spacing: 1px;
+}
+
+.family-panel {
+  background: var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-lg);
+  padding: 24px 20px;
+  margin-bottom: 40px;
+}
+
+.family-title {
+  font-family: var(--font-heading);
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--color-primary-dark);
+  margin-bottom: 18px;
+}
+
+.family-title .cheers { font-size: 16px; }
+
+.family-grid {
+  display: flex;
+  text-align: left;
+}
+
+.family-grid .family-col {
+  flex: 1 1 50%;
+  padding: 0 14px;
+  font-size: 12.5px;
+  line-height: 1.7;
+}
+.family-grid .family-col:first-child {
+  border-right: 1px solid var(--color-line);
+}
+
+.family-grid .family-line strong {
+  color: var(--color-text);
+  font-weight: 700;
+}
+
+.family-grid .family-address {
+  margin-top: 6px;
+  color: var(--color-text-soft);
+  font-size: 11.5px;
+}
+
+.invite-heading {
+  font-family: var(--font-script);
+  font-size: 34px;
+  color: var(--color-primary);
+}
+
+.invite-dots {
+  color: var(--color-gold);
+  letter-spacing: 6px;
+  font-size: 12px;
+  margin: 6px 0 22px;
+}
+
+.invite-names {
+  font-family: var(--font-script);
+  font-size: 40px;
+  color: var(--color-primary-dark);
+  line-height: 1.2;
+  margin-bottom: 20px;
+}
+
+.invite-heart {
+  color: var(--color-primary);
+  font-size: 0.7em;
+  margin: 0 6px;
+  vertical-align: middle;
+}
+
+.invite-body {
   font-family: var(--font-heading);
   font-weight: 700;
-  font-size: 22px;
-  letter-spacing: 2px;
-  border: 1px solid var(--color-gold);
-}
-
-.flip-front {
-  background: var(--color-surface);
+  font-size: 16px;
+  line-height: 1.7;
   color: var(--color-primary-dark);
-}
-
-.flip-back {
-  transform: rotateY(180deg);
-  background: var(--color-primary);
-  color: var(--color-gold);
-}
-
-@keyframes flip-card-cycle {
-  0%, 42% { transform: rotateY(0deg); }
-  50%, 92% { transform: rotateY(180deg); }
-  100% { transform: rotateY(360deg); }
+  letter-spacing: 0.5px;
 }
 
 /* ==========================================================================
@@ -502,62 +591,6 @@ h1, h2, h3 { font-family: var(--font-heading); margin: 0; color: var(--color-pri
   line-height: 1.5;
   padding-top: 8px;
   border-top: 1px solid var(--color-line);
-}
-
-/* ==========================================================================
-   Story timeline
-   ========================================================================== */
-
-.timeline {
-  text-align: left;
-  position: relative;
-  padding-left: 24px;
-}
-.timeline::before {
-  content: "";
-  position: absolute;
-  left: 6px;
-  top: 6px;
-  bottom: 6px;
-  width: 2px;
-  background: var(--color-line);
-}
-
-.timeline-item {
-  position: relative;
-  padding-bottom: 28px;
-}
-.timeline-item:last-child { padding-bottom: 0; }
-
-.timeline-item::before {
-  content: "";
-  position: absolute;
-  left: -24px;
-  top: 4px;
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background: var(--color-gold);
-  border: 2px solid var(--color-surface);
-  box-shadow: 0 0 0 2px var(--color-gold);
-}
-
-.timeline-year {
-  font-family: var(--font-heading);
-  color: var(--color-primary);
-  font-weight: 700;
-  font-size: 15px;
-}
-
-.timeline-title {
-  font-weight: 700;
-  margin: 2px 0 4px;
-}
-
-.timeline-text {
-  font-size: 13.5px;
-  color: var(--color-text-soft);
-  line-height: 1.6;
 }
 
 /* ==========================================================================

@@ -39,6 +39,17 @@
     return parts.join(" ");
   }
 
+  // "{title} {name} {companion}" with no "Kính mời" prefix — used in the
+  // "Thư Mời Cưới" invitation-letter block, which supplies its own lead-in
+  // line ("TRÂN TRỌNG KÍNH MỜI ...").
+  function guestPhraseFor(guest) {
+    var parts = [];
+    if (guest.title) parts.push(guest.title);
+    parts.push(guest.name);
+    if (guest.companion) parts.push(guest.companion);
+    return parts.join(" ");
+  }
+
   // Short "{title} {name}" label used in the shareable link's title/preview,
   // e.g. "chị Liên" — distinct from the fuller on-page greeting above.
   function shortLabelFor(guest) {
@@ -112,6 +123,37 @@
     container.innerHTML = html;
   }
 
+  function pad2(n) { return String(n).padStart(2, "0"); }
+
+  // "08.08 - 10.08.2026" style range spanning every ceremony date.
+  function renderDateRange() {
+    var el = document.getElementById("date-range-text");
+    var dates = (CONFIG.wedding.events || []).map(function (ev) { return new Date(ev.date); });
+    if (!dates.length) dates = [new Date(CONFIG.wedding.date)];
+    dates.sort(function (a, b) { return a - b; });
+    var first = dates[0];
+    var last = dates[dates.length - 1];
+    var firstStr = pad2(first.getDate()) + "." + pad2(first.getMonth() + 1);
+    var lastStr = pad2(last.getDate()) + "." + pad2(last.getMonth() + 1);
+    el.textContent = sameDay(first, last)
+      ? firstStr + "." + last.getFullYear()
+      : firstStr + " - " + lastStr + "." + last.getFullYear();
+  }
+
+  function renderFamilyPanel(groom, bride) {
+    var grid = document.getElementById("family-grid");
+    function col(p) {
+      return (
+        '<div class="family-col">' +
+        (p.father ? '<div class="family-line"><strong>Ông:</strong> ' + p.father + "</div>" : "") +
+        (p.mother ? '<div class="family-line"><strong>Bà:</strong> ' + p.mother + "</div>" : "") +
+        (p.address ? '<div class="family-address">' + p.address + "</div>" : "") +
+        "</div>"
+      );
+    }
+    grid.innerHTML = col(groom) + col(bride);
+  }
+
   function renderAll() {
     var guest = resolveGuest();
     var groom = CONFIG.couple.groom;
@@ -131,10 +173,8 @@
     document.getElementById("hero-date").textContent = formatDate(CONFIG.wedding.date);
     document.getElementById("hero-lunar").textContent = CONFIG.wedding.lunarDate || "";
 
-    // Calendar + flip card
+    // Calendar
     document.getElementById("hero-badge").textContent = CONFIG.couple.badge || "";
-    document.getElementById("flip-front").textContent = CONFIG.couple.marryPrompt || "";
-    document.getElementById("flip-back").textContent = CONFIG.couple.marryAnswer || "";
     renderCalendar();
 
     // Couple cards
@@ -158,22 +198,17 @@
     var forewordEl = document.getElementById("foreword-text");
     forewordEl.innerHTML = (CONFIG.foreword || []).map(function (p) { return "<p>" + p + "</p>"; }).join("");
 
-    // Story timeline
-    var storySection = document.getElementById("story-section");
-    if (CONFIG.story && CONFIG.story.length) {
-      var timeline = document.getElementById("timeline");
-      timeline.innerHTML = "";
-      CONFIG.story.forEach(function (item) {
-        var node = el("div", "timeline-item reveal");
-        node.innerHTML =
-          '<div class="timeline-year">' + item.year + "</div>" +
-          '<div class="timeline-title">' + item.title + "</div>" +
-          '<div class="timeline-text">' + item.text + "</div>";
-        timeline.appendChild(node);
-      });
-    } else {
-      storySection.style.display = "none";
-    }
+    // Family info + personalized invitation letter
+    renderDateRange();
+    renderFamilyPanel(groom, bride);
+    var invite = CONFIG.invite || {};
+    document.querySelector("#letter-section .invite-heading").textContent = invite.heading || "Thư Mời Cưới";
+    document.getElementById("invite-names").innerHTML =
+      groom.name + '<span class="invite-heart">&hearts;</span>' + bride.name;
+    document.getElementById("invite-body").innerHTML =
+      (invite.line1 || "TRÂN TRỌNG KÍNH MỜI") + " " + escapeHtml(guestPhraseFor(guest)).toUpperCase() +
+      "<br>" + (invite.line2 || "") +
+      "<br>" + (invite.line3 || "");
 
     // Events
     var eventsWrap = document.getElementById("events-wrap");
