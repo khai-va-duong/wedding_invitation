@@ -1,7 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="500" height="500" viewBox="0 0 500 500">
-  <rect width="500" height="500" fill="#b7684f"/>
-  <g fill="#ffffff" opacity="0.75">
-    <path d="M250 150 C210 90 110 110 110 190 C110 260 200 310 250 360 C300 310 390 260 390 190 C390 110 290 90 250 150 Z"/>
-  </g>
-  <text x="250" y="460" font-family="Quicksand, sans-serif" font-size="20" fill="#ffffff" text-anchor="middle">Anh cuoi 2</text>
-</svg>

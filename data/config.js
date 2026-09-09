@@ -11,7 +11,8 @@ window.SITE_CONFIG = {
       father: "Nguyễn Văn Khoa",
       mother: "Trần Thị Hoa",
       address: "SN 130A Đặng Quang - TDP 5, P. Quang Trung - Thanh Hóa",
-      photo: "assets/img/groom.svg",
+      // Replace with your own photo (a hosted URL, or a local file under assets/img/)
+      photo: "https://images.unsplash.com/photo-1553455274-5297e1a79c49?w=400&h=400&q=80&auto=format&fit=crop",
       quote: "Khoảnh khắc gặp được em, anh đã quyết định sẽ cùng em đi đến hết cuộc đời.",
       order: 1, // shown first
     },
@@ -22,7 +23,8 @@ window.SITE_CONFIG = {
       father: "Lê Văn Sơn",
       mother: "Phạm Thị Lan",
       address: "Thôn Thanh Vòng, Xã Thanh Vân - Bắc Ninh",
-      photo: "assets/img/bride.svg",
+      // Replace with your own photo (a hosted URL, or a local file under assets/img/)
+      photo: "https://images.unsplash.com/photo-1766416143515-302f0e5ccbee?w=400&h=400&q=80&auto=format&fit=crop",
       quote: "Giữa thế gian huyên náo, anh là lý do để em mỉm cười mỗi ngày.",
       order: 2,
     },
@@ -79,28 +81,32 @@ window.SITE_CONFIG = {
     line3: "CHUNG VUI CÙNG GIA ĐÌNH CHÚNG TÔI!",
   },
 
+  // Replace with your own wedding photos (hosted URLs, or local files under
+  // assets/img/) once you have them — these are real placeholder photography
+  // (Unsplash, free to use) so the page looks finished in the meantime.
   gallery: [
-    "assets/img/gallery/1.svg",
-    "assets/img/gallery/2.svg",
-    "assets/img/gallery/3.svg",
-    "assets/img/gallery/4.svg",
-    "assets/img/gallery/5.svg",
-    "assets/img/gallery/6.svg",
+    "https://images.unsplash.com/photo-1596457221755-b96bc3a6df18?w=700&h=700&q=80&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1717578899442-7a9e55267903?w=700&h=700&q=80&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1595919994909-0f80404101dd?w=700&h=700&q=80&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1718183442384-921bf92d2edf?w=700&h=700&q=80&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1721401870202-8e2264ecced2?w=700&h=700&q=80&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1563476241873-3a74ddd9fa4c?w=700&h=700&q=80&auto=format&fit=crop",
   ],
 
   gift: {
     intro: "Sự hiện diện của quý khách là niềm vinh hạnh cho gia đình chúng tôi. Nếu quý khách muốn gửi lời chúc phúc bằng một món quà nhỏ, chúng tôi xin trân trọng đón nhận qua thông tin bên dưới.",
+    // QR codes are generated automatically from bankName/accountNumber/accountName
+    // below (see qrUrlFor() in assets/js/app.js) — edit those fields and the QR
+    // updates itself, no image file to replace.
     groom: {
       bankName: "Vietcombank",
       accountName: "NGUYEN QUANG KHAI",
       accountNumber: "0123456789",
-      qr: "assets/img/qr-groom.svg",
     },
     bride: {
       bankName: "Techcombank",
       accountName: "LE ABC DUONG",
       accountNumber: "9876543210",
-      qr: "assets/img/qr-bride.svg",
     },
   },
 
@@ -127,7 +133,7 @@ window.SITE_CONFIG = {
     defaultGuestLabel: "bạn",
     // Link-preview description/subtitle, same for every guest
     subtitle: "đến dự buổi tiệc chung vui cùng gia đình",
-    // Replace with a hosted image URL for rich link previews on Zalo/Facebook/Messenger
-    image: "assets/img/cover-share.svg",
+    // Shown as the thumbnail when the link is shared on Zalo/Facebook/Messenger
+    image: "https://images.unsplash.com/photo-1596457221755-b96bc3a6df18?w=1200&h=630&q=80&auto=format&fit=crop",
   },
 };

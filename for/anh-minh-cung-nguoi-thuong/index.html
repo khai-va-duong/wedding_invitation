@@ -13,7 +13,7 @@
 <!-- Open Graph / Zalo / Messenger link preview. -->
 <meta property="og:title" data-seo="og:title" content="Thân mời anh Minh | Ngày chung đôi">
 <meta property="og:description" data-seo="og:description" content="đến dự buổi tiệc chung vui cùng gia đình">
-<meta property="og:image" content="assets/img/cover-share.svg">
+<meta property="og:image" content="https://images.unsplash.com/photo-1596457221755-b96bc3a6df18?w=1200&h=630&q=80&auto=format&fit=crop">
 <meta property="og:type" content="website">
 
 <link rel="icon" href="../../assets/img/favicon.svg" type="image/svg+xml">
@@ -102,7 +102,7 @@
     </div>
 
     <div class="family-panel reveal">
-      <h3 class="family-title">Nhà Trai <span class="cheers">&#127866;</span> Nhà Gái</h3>
+      <h3 class="family-title">Nhà Trai <span class="cheers" id="cheers-icon"></span> Nhà Gái</h3>
       <div class="family-grid" id="family-grid"></div>
     </div>
 
@@ -179,7 +179,7 @@
 
 <!-- Floating music toggle -->
 <button id="music-toggle" aria-pressed="false" aria-label="Bật/Tắt nhạc nền">
-  <span class="disc">&#127925;</span>
+  <span class="disc" id="music-icon"></span>
 </button>
 <audio id="bg-audio" loop preload="metadata">
   <source src="../../assets/audio/background-music.mp3" type="audio/mpeg">

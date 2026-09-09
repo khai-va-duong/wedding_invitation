@@ -424,7 +424,13 @@ h1, h2, h3 { font-family: var(--font-heading); margin: 0; color: var(--color-pri
   margin-bottom: 18px;
 }
 
-.family-title .cheers { font-size: 16px; }
+.family-title .cheers {
+  display: inline-flex;
+  vertical-align: middle;
+  color: var(--color-gold);
+  margin: 0 2px;
+}
+.family-title .cheers svg { width: 12px; height: 12px; }
 
 .family-grid {
   display: flex;
@@ -637,6 +643,11 @@ h1, h2, h3 { font-family: var(--font-heading); margin: 0; color: var(--color-pri
   width: 18px;
   text-align: center;
 }
+.event-row .icon svg {
+  width: 16px;
+  height: 16px;
+  margin-top: 1px;
+}
 
 .event-row .value strong { display: block; color: var(--color-text); }
 
@@ -747,7 +758,7 @@ h1, h2, h3 { font-family: var(--font-heading); margin: 0; color: var(--color-pri
   font-size: 13.5px;
   font-weight: 700;
   margin: 6px 0;
-  word-break: break-all;
+  overflow-wrap: break-word;
 }
 
 .btn-copy {
@@ -879,9 +890,11 @@ h1, h2, h3 { font-family: var(--font-heading); margin: 0; color: var(--color-pri
 }
 
 #music-toggle .disc {
+  display: flex;
   animation: spin 3.5s linear infinite;
   animation-play-state: paused;
 }
+#music-toggle .disc svg { width: 20px; height: 20px; }
 #music-toggle.playing .disc { animation-play-state: running; }
 
 @keyframes spin {

@@ -21,17 +21,30 @@ Almost everything is in two files:
 Open each file and edit the values — they're plain JavaScript objects with comments
 explaining every field.
 
-### Photos, gallery & QR codes
+### Photos & gallery
 
-Replace the placeholder SVGs in `assets/img/` with your own photos (same filenames, or
-update the paths in `data/config.js`):
+`data/config.js` currently points `couple.groom.photo`, `couple.bride.photo`,
+`gallery`, and `seo.image` at real (free-to-use, Unsplash) wedding photography, so the
+site looks finished out of the box. Replace them with your own:
 
-- `assets/img/groom.svg`, `assets/img/bride.svg` — profile photos
-- `assets/img/gallery/1.svg` … `6.svg` — gallery photos (add/remove entries in
-  `config.gallery` to match)
-- `assets/img/qr-groom.svg`, `assets/img/qr-bride.svg` — your bank app's QR/VietQR image
-- `assets/img/cover-share.svg` — the image shown when the link is shared on
-  Zalo/Facebook/Messenger
+- Easiest: upload your photos anywhere that gives you a direct image URL (e.g. an
+  Imgur/Cloudinary link, or a photo host of your choice) and paste that URL in.
+- Or: put files under `assets/img/` (e.g. `assets/img/groom.jpg`) and point the config
+  field at `assets/img/groom.jpg` instead of a URL — both local paths and full URLs
+  work anywhere an image is referenced in `data/config.js`.
+- `gallery` is an array — add/remove entries freely, the album grid follows its length.
+- `seo.image` is the thumbnail shown when the link is shared on Zalo/Facebook/Messenger
+  (1200×630 recommended).
+
+### Gift QR codes
+
+QR codes are **generated automatically** (via the free api.qrserver.com service) from
+`gift.groom` / `gift.bride`'s `bankName`, `accountNumber`, and `accountName` in
+`data/config.js` — there's no QR image to create or replace. Edit those three fields and
+the QR on the page updates itself to match. If you'd rather use your bank app's own
+official VietQR image instead, add a `qr: "assets/img/your-file.png"` (or a URL) field
+to that gift entry — `qrUrlFor()` in `assets/js/app.js` falls back to generating one
+only when `qr` isn't set.
 
 ### Background music
 
@@ -175,9 +188,9 @@ scripts/generate.js     builds for/<slug>/index.html per guest (run after editin
 for/<slug>/index.html   generated personalized pages — do not hand-edit, re-run generate.js
 data/config.js          couple, wedding, gift, music, SEO, calendar/quote/foreword config
 data/guests.js          guest list for personalized links
-assets/css/style.css    all styling & animations (dark-red Chinese-wedding theme)
-assets/js/app.js        rendering, countdown, calendar, envelope, music, gallery, RSVP logic
-assets/img/             photos, gallery, QR codes, favicon (placeholders — replace these)
+assets/css/style.css    all styling & animations (white/cream base, maroon + gold accents)
+assets/js/app.js        rendering, countdown, calendar, envelope, music, gallery, QR, icons
+assets/img/             favicon + two decorative background textures (photos are hosted URLs)
 assets/audio/           background-music.mp3
 ```
 
@@ -187,8 +200,13 @@ assets/audio/           background-music.mp3
   Vietnamese "thiệp cưới online" invitation format (envelope intro, music, countdown,
   gallery, gift QR, wishes wall) — it does not reuse code or assets from any specific
   existing invitation site.
-- All placeholder images are plain SVGs generated for this project; swap them for your
-  own photography before sharing the link with guests.
+- Couple/gallery photos ship pointing at real Unsplash photography (free to use) so the
+  page looks finished immediately; swap them for your own before sharing the link with
+  guests (see "Photos & gallery" above).
+- Icons (calendar, map pin, music note, the small flourish in "Nhà Trai ⟡ Nhà Gái") are
+  hand-rolled inline SVGs in `assets/js/app.js` (the `ICONS` object) rather than emoji,
+  so they render identically everywhere instead of depending on the visitor's device
+  having matching emoji glyphs.
 - `for/*/index.html` files are generated, not hand-written — always edit
   `data/guests.js` and re-run `npm run generate`, don't edit files under `for/` directly
   (they'll just get overwritten next time).

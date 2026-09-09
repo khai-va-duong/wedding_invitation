@@ -8,6 +8,21 @@
 
   var CONFIG = window.SITE_CONFIG;
   var GUESTS = window.GUEST_LIST || [];
+
+  // Small inline-SVG icon set (stroke uses currentColor, so each icon
+  // inherits whatever text color it's placed in). Used instead of emoji,
+  // which render inconsistently — missing glyphs, mismatched art styles —
+  // across devices and fonts.
+  var ICONS = {
+    calendar:
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>',
+    pin:
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>',
+    music:
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>',
+    sparkle:
+      '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="8" y="8" width="8" height="8" rx="2" transform="rotate(45 12 12)"/></svg>',
+  };
   var DEFAULT_GUEST = window.DEFAULT_GUEST || { title: "", name: "Quý khách", companion: "" };
 
   /* ------------------------------------------------------------------ *
@@ -218,9 +233,9 @@
       card.innerHTML =
         '<div class="event-title">' + ev.title + "</div>" +
         '<div class="event-desc">' + (ev.description || "") + "</div>" +
-        '<div class="event-row"><span class="icon">&#128197;</span><span class="value"><strong>' +
+        '<div class="event-row"><span class="icon">' + ICONS.calendar + '</span><span class="value"><strong>' +
           formatDate(ev.date) + '</strong>Lúc ' + ev.time + "</span></div>" +
-        '<div class="event-row"><span class="icon">&#128205;</span><span class="value"><strong>' +
+        '<div class="event-row"><span class="icon">' + ICONS.pin + '</span><span class="value"><strong>' +
           ev.venue + '</strong>' + ev.address + "</span></div>" +
         (ev.mapUrl ? '<div style="text-align:center"><a class="map-link" target="_blank" rel="noopener" href="' + ev.mapUrl + '">Xem bản đồ &rarr;</a></div>' : "");
       eventsWrap.appendChild(card);
@@ -248,10 +263,27 @@
     document.getElementById("footer-hashtag").textContent = CONFIG.wedding.hashtag || "";
   }
 
+  // Generates a real, scannable QR (via the free api.qrserver.com service)
+  // encoding the bank/account info below, tinted to match the site's
+  // maroon accent — no QR image file to keep in sync with the account
+  // details, it just regenerates from whatever gift.groom/gift.bride say.
+  function qrUrlFor(gift) {
+    if (gift.qr) return gift.qr;
+    var payload = [gift.bankName, gift.accountNumber, gift.accountName].filter(Boolean).join(" - ");
+    var params = new URLSearchParams({
+      size: "300x300",
+      margin: "8",
+      color: "125-43-52",
+      bgcolor: "255-255-255",
+      data: payload,
+    });
+    return "https://api.qrserver.com/v1/create-qr-code/?" + params.toString();
+  }
+
   function renderGiftCard(containerId, ownerName, gift) {
     var container = document.getElementById(containerId);
     container.innerHTML =
-      '<img class="qr" src="' + gift.qr + '" alt="QR chuyển khoản ' + ownerName + '">' +
+      '<img class="qr" src="' + qrUrlFor(gift) + '" alt="QR chuyển khoản ' + ownerName + '" loading="lazy">' +
       '<div class="gift-owner">' + ownerName + "</div>" +
       '<div class="gift-bank">' + gift.bankName + "</div>" +
       '<div class="gift-account">' + gift.accountNumber + " &middot; " + gift.accountName + "</div>" +
@@ -511,7 +543,13 @@
   /* ------------------------------------------------------------------ *
    * Init
    * ------------------------------------------------------------------ */
+  function renderStaticIcons() {
+    document.getElementById("cheers-icon").innerHTML = ICONS.sparkle;
+    document.getElementById("music-icon").innerHTML = ICONS.music;
+  }
+
   document.addEventListener("DOMContentLoaded", function () {
+    renderStaticIcons();
     renderAll();
     setupEnvelope();
     setupMusic();
