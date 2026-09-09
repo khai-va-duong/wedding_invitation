@@ -55,18 +55,19 @@ h1, h2, h3 { font-family: var(--font-heading); margin: 0; color: var(--color-pri
 
 /* Faint paper-grain texture behind every section that doesn't set its own
    opaque background (hero/calendar/footer keep their own gradient). Kept
-   very low-opacity and cropped away from the source image's bolder brush
-   stroke so it reads as a subtle watermark, not a color block. */
+   very low-opacity so it reads as a subtle watermark, not a color block.
+   Hotlinked from Unsplash (free to use), sized generously so it stays
+   sharp at both phone and desktop widths. */
 .container::before {
   content: "";
   position: absolute;
   inset: 0;
   z-index: 0;
-  background-image: url('../img/bg-paper-texture.jpg');
+  background-image: url('https://images.unsplash.com/photo-1601662528567-526cd06f6582?w=1600&q=75&auto=format&fit=crop');
   background-repeat: no-repeat;
-  background-position: left bottom;
+  background-position: center;
   background-size: cover;
-  opacity: 0.14;
+  opacity: 0.16;
   pointer-events: none;
 }
 
@@ -145,10 +146,15 @@ h1, h2, h3 { font-family: var(--font-heading); margin: 0; color: var(--color-pri
   display: flex;
   align-items: center;
   justify-content: center;
-  background-image: url('../img/bg-pattern-top.jpg'), radial-gradient(circle at top, #fffdfb 0%, #f6e9da 100%);
+  /* A translucent cream wash sits over the photo so it reads as a soft
+     tint rather than a loud, saturated texture, and stays even at any
+     viewport size — cover sizing means no repeat seams on wide desktops. */
+  background-image:
+    linear-gradient(180deg, rgba(255, 253, 250, 0.72) 0%, rgba(255, 253, 250, 0.86) 100%),
+    url('https://images.unsplash.com/photo-1612293025896-7200cc87e540?w=2400&q=75&auto=format&fit=crop');
   background-repeat: no-repeat, no-repeat;
-  background-position: top center, center;
-  background-size: 100% auto, cover;
+  background-position: center, center;
+  background-size: cover, cover;
   transition: opacity 0.9s ease, visibility 0.9s ease;
 }
 #envelope.hidden {
@@ -229,10 +235,14 @@ h1, h2, h3 { font-family: var(--font-heading); margin: 0; color: var(--color-pri
 #hero {
   padding: 72px 28px 56px;
   text-align: center;
-  background-image: url('../img/bg-pattern-top.jpg'), linear-gradient(180deg, var(--color-bg-alt) 0%, var(--color-bg) 100%);
+  /* Same soft-wash treatment as #envelope, so the two feel like one
+     continuous "cover" moment as the envelope opens into the hero. */
+  background-image:
+    linear-gradient(180deg, rgba(255, 253, 250, 0.75) 0%, var(--color-bg) 100%),
+    url('https://images.unsplash.com/photo-1612293025896-7200cc87e540?w=1400&q=75&auto=format&fit=crop');
   background-repeat: no-repeat, no-repeat;
-  background-position: top center, center;
-  background-size: 100% auto, cover;
+  background-position: center, center top;
+  background-size: cover, cover;
 }
 
 .hero-eyebrow {

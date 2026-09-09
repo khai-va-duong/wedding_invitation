@@ -190,7 +190,7 @@ data/config.js          couple, wedding, gift, music, SEO, calendar/quote/forewo
 data/guests.js          guest list for personalized links
 assets/css/style.css    all styling & animations (white/cream base, maroon + gold accents)
 assets/js/app.js        rendering, countdown, calendar, envelope, music, gallery, QR, icons
-assets/img/             favicon + two decorative background textures (photos are hosted URLs)
+assets/img/             favicon only — every photo and background texture is a hosted URL
 assets/audio/           background-music.mp3
 ```
 
