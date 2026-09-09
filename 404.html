@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Đang chuyển hướng...</title>
+<script>
+  // GitHub Pages serves this file for any path it doesn't recognize as a
+  // real file, e.g. /for/chi-lien-cung-nguoi-thuong. We forward the
+  // visitor to index.html, packing the intended path into a query string;
+  // index.html's inline script puts it back in the address bar on load.
+  // (Standard SPA-on-GitHub-Pages redirect trick.)
+  // Works whether the site is deployed at the domain root or under a
+  // project subpath like /To_quang_khai_wedding/ — everything before
+  // "/for/" is treated as the base path and preserved.
+  var loc = window.location;
+  var marker = "/for/";
+  var idx = loc.pathname.indexOf(marker);
+  var base = idx === -1 ? "" : loc.pathname.slice(0, idx);
+  var rest = idx === -1 ? loc.pathname : loc.pathname.slice(idx);
+  var target = rest + loc.search; // e.g. /for/chi-lien-cung-nguoi-thuong
+  loc.replace(base + "/?p=" + encodeURIComponent(target) + loc.hash);
+</script>
+</head>
+<body>
+  <p>Đang chuyển hướng đến thiệp mời...</p>
+</body>
+</html>

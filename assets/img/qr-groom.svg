@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">
+  <rect width="200" height="200" fill="#ffffff"/>
+  <rect x="10" y="10" width="180" height="180" fill="none" stroke="#8f4d3a" stroke-width="2" stroke-dasharray="6 6"/>
+  <text x="100" y="95" font-family="Quicksand, sans-serif" font-size="14" fill="#8f4d3a" text-anchor="middle">Thay bang anh QR</text>
+  <text x="100" y="115" font-family="Quicksand, sans-serif" font-size="14" fill="#8f4d3a" text-anchor="middle">chuyen khoan cua ban</text>
+</svg>

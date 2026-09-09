@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Danh sách link mời khách</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body style="background:#fff">
+<div class="admin-wrap">
+  <h1>Link mời khách</h1>
+  <p>Trang này chỉ dành cho bạn (người tổ chức) — dùng để lấy nhanh link mời riêng cho từng khách.
+     Không cần chia sẻ trang này cho khách mời. Sửa danh sách khách tại <code>data/guests.js</code>.</p>
+  <div id="rows"></div>
+</div>
+
+<script src="data/config.js"></script>
+<script src="data/guests.js"></script>
+<script>
+  function greetingFor(guest) {
+    if (guest.greeting) return guest.greeting;
+    var parts = ["Kính mời"];
+    if (guest.title) parts.push(guest.title);
+    parts.push(guest.name);
+    if (guest.companion) parts.push(guest.companion);
+    return parts.join(" ");
+  }
+
+  var rows = document.getElementById("rows");
+  var base = window.location.origin + window.location.pathname.replace(/admin\.html$/, "");
+
+  window.GUEST_LIST.forEach(function (guest) {
+    var url = base + "for/" + guest.slug;
+    var row = document.createElement("div");
+    row.className = "admin-row";
+    row.innerHTML =
+      '<div>' +
+        '<div class="greet">' + greetingFor(guest) + '</div>' +
+        '<div class="url">' + url + '</div>' +
+      '</div>' +
+      '<button type="button">Sao chép</button>';
+    row.querySelector("button").addEventListener("click", function (e) {
+      navigator.clipboard.writeText(url).then(function () {
+        e.target.textContent = "Đã chép!";
+        setTimeout(function () { e.target.textContent = "Sao chép"; }, 1500);
+      });
+    });
+    rows.appendChild(row);
+  });
+</script>
+</body>
+</html>
