@@ -244,7 +244,7 @@
       var item = list[Number(slot.getAttribute("data-interlude"))];
       if (!item) { slot.remove(); return; }
       slot.innerHTML =
-        '<div class="interlude-media"><img data-parallax loading="lazy" alt="" src="' + photoUrl(item.photo, "web") + '"></div>' +
+        '<div class="interlude-media"><img loading="lazy" alt="" src="' + photoUrl(item.photo, "web") + '"></div>' +
         '<div class="interlude-text reveal">' +
           (item.chapter ? '<div class="interlude-chapter">' + escapeHtml(item.chapter) + "</div>" : "") +
           '<blockquote class="interlude-quote">' + escapeHtml(item.quote || "") + "</blockquote>" +
@@ -568,7 +568,7 @@
   }
 
   /* ------------------------------------------------------------------ *
-   * Parallax: hero photo + interlude photos drift slower than the page
+   * Parallax: the hero photo drifts slower than the page
    * ------------------------------------------------------------------ */
   function setupParallax() {
     if (REDUCED_MOTION) return;
@@ -577,16 +577,9 @@
 
     function update() {
       scheduled = false;
-      var vh = window.innerHeight;
-      if (window.scrollY < vh * 1.2) {
+      if (window.scrollY < window.innerHeight * 1.2) {
         hero.style.setProperty("--parallax", (window.scrollY * 0.35).toFixed(1) + "px");
       }
-      document.querySelectorAll("[data-parallax]").forEach(function (img) {
-        var rect = img.parentNode.getBoundingClientRect();
-        if (rect.bottom < 0 || rect.top > vh) return;
-        var offset = (rect.top + rect.height / 2 - vh / 2) * -0.18;
-        img.style.transform = "translate3d(0," + offset.toFixed(1) + "px,0) scale(1.18)";
-      });
     }
     window.addEventListener("scroll", function () {
       if (!scheduled) {

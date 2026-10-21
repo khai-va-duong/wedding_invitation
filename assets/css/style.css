@@ -686,11 +686,11 @@ h1, h2, h3 { font-family: var(--font-heading); margin: 0; color: var(--color-pri
    Interludes — full-width photo pauses between sections
    ========================================================================== */
 
+/* The box takes the photos' own 2:3 portrait shape, so the whole photo is
+   shown — no faces cut off at any screen width. */
 .interlude {
   position: relative;
-  height: 82vh;
-  min-height: 460px;
-  max-height: 680px;
+  aspect-ratio: 2 / 3;
   display: flex;
   align-items: flex-end;
   justify-content: center;
@@ -712,9 +712,13 @@ h1, h2, h3 { font-family: var(--font-heading); margin: 0; color: var(--color-pri
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transform: scale(1.18);
-  will-change: transform;
+  object-position: center top;
+  /* Starts slightly zoomed in and settles to the full photo as it is revealed. */
+  transform: scale(1.12);
+  transform-origin: center 30%;
+  transition: transform 2.6s var(--ease-out);
 }
+.interlude.in-view .interlude-media img { transform: none; }
 .interlude-media::after {
   content: "";
   position: absolute;
