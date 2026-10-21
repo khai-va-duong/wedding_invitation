@@ -312,6 +312,7 @@
       '<span class="invite-guest">' + escapeHtml(guestPhraseFor(guest)) + "</span>" +
       (invite.line2 || "") +
       "<br>" + (invite.line3 || "");
+    document.getElementById("invite-closing").textContent = invite.closing || "";
 
     // Events
     var eventsWrap = document.getElementById("events-wrap");

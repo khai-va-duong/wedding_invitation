@@ -6,28 +6,26 @@ window.SITE_CONFIG = {
   couple: {
     groom: {
       name: "Quang Khải",
-      fullName: "Nguyễn Quang Khải",
-      parents: "Ông Nguyễn Văn Khoa & Bà Trần Thị Hoa",
-      father: "Nguyễn Văn Khoa",
-      mother: "Trần Thị Hoa",
-      address: "SN 130A Đặng Quang - TDP 5, P. Quang Trung - Thanh Hóa",
+      fullName: "Tô Quang Khải",
+      parents: "Ông Tô Xuân Khiêm & Bà Hoàng Thị Hiền",
+      father: "Tô Xuân Khiêm",
+      mother: "Hoàng Thị Hiền",
       // A photo name from assets/img (e.g. "DSC_7455"), a local path, or a full URL — see "photos" below.
       photo: "DSC_7455",
       quote: "Khoảnh khắc gặp được em, anh đã quyết định sẽ cùng em đi đến hết cuộc đời.",
       order: 1, // shown first
     },
     bride: {
-      name: "ABC Dương",
-      fullName: "Lê ABC Dương",
-      parents: "Ông Lê Văn Sơn & Bà Phạm Thị Lan",
-      father: "Lê Văn Sơn",
-      mother: "Phạm Thị Lan",
-      address: "Thôn Thanh Vòng, Xã Thanh Vân - Bắc Ninh",
+      name: "Thuỳ Dương",
+      fullName: "Nguyễn Thuỳ Dương",
+      parents: "Ông Nguyễn Văn Bẩy & Bà Lương Thị Hơn",
+      father: "Nguyễn Văn Bẩy",
+      mother: "Lương Thị Hơn",
       photo: "DSC_7510",
       quote: "Giữa thế gian huyên náo, anh là lý do để em mỉm cười mỗi ngày.",
       order: 2,
     },
-    // Used for the big cover title, e.g. "Quang Khải & ABC Dương"
+    // Used for the big cover title, e.g. "Quang Khải & Thuỳ Dương"
     separator: "&",
     // Small cover-page copy
     badge: "SWEET WEDDING",
@@ -37,28 +35,20 @@ window.SITE_CONFIG = {
 
   wedding: {
     // ISO date used by the countdown timer
-    date: "2026-12-20T11:00:00+07:00",
-    lunarDate: "Ngày 12 tháng 11 năm Bính Ngọ",
+    date: "2026-11-15T10:00:00+07:00",
+    lunarDate: "Tức ngày 07 tháng 10 năm Bính Ngọ",
     hashtag: "#QuangKhaiVaDuong2026",
     // Ceremony timeline, shown as cards in order
     events: [
       {
-        title: "Lễ Vu Quy",
-        description: "Nhà gái tổ chức lễ đón dâu",
-        date: "2026-12-19",
-        time: "09:00",
-        venue: "Tư gia nhà gái",
-        address: "123 Đường ABC, Phường 1, Quận XYZ, TP. Hồ Chí Minh",
-        mapUrl: "https://maps.google.com/?q=123+Duong+ABC+TP+Ho+Chi+Minh",
-      },
-      {
-        title: "Lễ Thành Hôn",
-        description: "Tiệc cưới thân mật tại nhà hàng",
-        date: "2026-12-20",
-        time: "11:00",
-        venue: "Trung tâm Hội nghị Tiệc cưới Hoa Sen",
-        address: "456 Đường DEF, Phường 2, Quận UVW, TP. Hồ Chí Minh",
-        mapUrl: "https://maps.google.com/?q=456+Duong+DEF+TP+Ho+Chi+Minh",
+        title: "Tiệc Mừng Lễ Thành Hôn",
+        description: "Bữa tiệc thân mật mừng lễ thành hôn",
+        date: "2026-11-15",
+        time: "10:00",
+        venue: "Nhà Văn Hoá Làng Quyết Tiến",
+        address: "Thôn Báo Hà - Xã Vĩnh Hải - TP. Hải Phòng",
+        // Same pin as the location QR on the printed card.
+        mapUrl: "https://www.google.com/maps?q=20.650437,106.464346",
       },
     ],
   },
@@ -76,8 +66,9 @@ window.SITE_CONFIG = {
   invite: {
     heading: "Thư Mời Cưới",
     line1: "TRÂN TRỌNG KÍNH MỜI",
-    line2: "ĐẾN DỰ BUỔI TIỆC VÀ",
-    line3: "CHUNG VUI CÙNG GIA ĐÌNH CHÚNG TÔI!",
+    line2: "ĐẾN DỰ BỮA TIỆC THÂN MẬT MỪNG LỄ THÀNH HÔN",
+    line3: "CỦA HAI CON CHÚNG TÔI",
+    closing: "Rất hân hạnh được đón tiếp!",
   },
 
   /*

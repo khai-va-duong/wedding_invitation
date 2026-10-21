@@ -907,6 +907,14 @@ h1, h2, h3 { font-family: var(--font-heading); margin: 0; color: var(--color-pri
   color: var(--color-primary);
 }
 
+.invite-closing {
+  margin-top: 18px;
+  font-family: var(--font-script);
+  font-size: 28px;
+  color: var(--color-primary);
+}
+.invite-closing:empty { display: none; }
+
 /* ==========================================================================
    Marriage quote
    ========================================================================== */
