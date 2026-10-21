@@ -3,15 +3,38 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
 <title>Danh sách link mời khách</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body style="background:#fff">
 <div class="admin-wrap">
-  <h1>Link mời khách</h1>
-  <p>Trang này chỉ dành cho bạn (người tổ chức) — dùng để lấy nhanh link mời riêng cho từng khách.
-     Không cần chia sẻ trang này cho khách mời. Sửa danh sách khách tại <code>data/guests.js</code>.</p>
+  <h1>Tạo link mời khách</h1>
+  <p>Trang này chỉ dành cho người tổ chức. Nhập tên khách và lời mời để tạo link riêng —
+     không cần sửa file. Để trống thì thiệp hiển thị mặc định "Kính mời Quý khách".</p>
+
+  <form class="admin-builder" id="builder">
+    <div class="admin-sides" role="radiogroup" aria-label="Thiệp của nhà">
+      <label><input type="radio" name="side" value="" checked> Nhà Trai</label>
+      <label><input type="radio" name="side" value="nha-gai/"> Nhà Gái</label>
+    </div>
+    <label for="greet">Lời mời</label>
+    <input type="text" id="greet" placeholder="Kính mời" autocomplete="off">
+    <label for="name">Tên khách</label>
+    <input type="text" id="name" placeholder="Quý khách" autocomplete="off">
+    <div class="admin-preview" id="preview"></div>
+    <div class="admin-row">
+      <div class="url" id="link"></div>
+      <span class="admin-actions">
+        <a id="open" target="_blank" rel="noopener">Xem thử</a>
+        <button type="button" id="copy">Sao chép</button>
+      </span>
+    </div>
+  </form>
+
+  <h2>Khách đã lưu (Nhà Trai)</h2>
+  <p>Link riêng cho khách trong <code>data/guests.js</code>.</p>
   <div id="rows"></div>
 </div>
 
@@ -27,9 +50,44 @@
     return parts.join(" ");
   }
 
-  var rows = document.getElementById("rows");
-  var base = window.location.origin + window.location.pathname.replace(/admin\.html$/, "");
+  function copyWithFeedback(button, text) {
+    navigator.clipboard.writeText(text).then(function () {
+      button.textContent = "Đã chép!";
+      setTimeout(function () { button.textContent = "Sao chép"; }, 1500);
+    });
+  }
 
+  var base = window.location.origin + window.location.pathname.replace(/admin(\.html)?$/, "");
+
+  // Custom link builder: ?name=&greet= are read by resolveGuest() in app.js.
+  var form = document.getElementById("builder");
+  var nameInput = document.getElementById("name");
+  var greetInput = document.getElementById("greet");
+  var linkEl = document.getElementById("link");
+  var openEl = document.getElementById("open");
+  var currentLink = "";
+
+  function updateLink() {
+    var side = form.querySelector('input[name="side"]:checked').value;
+    var name = nameInput.value.trim();
+    var greet = greetInput.value.trim();
+    var params = new URLSearchParams();
+    if (greet) params.set("greet", greet);
+    if (name) params.set("name", name);
+    var query = params.toString();
+    currentLink = base + side + (query ? "?" + query : "");
+    linkEl.textContent = currentLink;
+    openEl.href = currentLink;
+    document.getElementById("preview").textContent = (greet || "Kính mời") + " " + (name || "Quý khách");
+  }
+  form.addEventListener("input", updateLink);
+  form.addEventListener("submit", function (e) { e.preventDefault(); });
+  document.getElementById("copy").addEventListener("click", function (e) {
+    copyWithFeedback(e.target, currentLink);
+  });
+  updateLink();
+
+  var rows = document.getElementById("rows");
   window.GUEST_LIST.forEach(function (guest) {
     var url = base + "for/" + guest.slug;
     var row = document.createElement("div");
@@ -42,10 +100,7 @@
       '</div>' +
       '<button type="button">Sao chép</button>';
     row.querySelector("button").addEventListener("click", function (e) {
-      navigator.clipboard.writeText(url).then(function () {
-        e.target.textContent = "Đã chép!";
-        setTimeout(function () { e.target.textContent = "Sao chép"; }, 1500);
-      });
+      copyWithFeedback(e.target, url);
     });
     rows.appendChild(row);
   });

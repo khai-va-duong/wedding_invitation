@@ -74,14 +74,27 @@
       if (params.get("to")) slug = params.get("to");
     }
 
-    if (!slug) return DEFAULT_GUEST;
-    var found = GUESTS.find(function (g) { return g.slug === slug; });
-    return found || DEFAULT_GUEST;
+    if (slug) {
+      var found = GUESTS.find(function (g) { return g.slug === slug; });
+      if (found) return found;
+    }
+    return customGuest() || DEFAULT_GUEST;
+  }
+
+  // Ad-hoc guest from ?name=<guest name>&greet=<welcome phrase>, built on
+  // admin.html — for guests who aren't in data/guests.js. Either part may be
+  // left out; the defaults ("Quý khách", "Kính mời") fill the gap.
+  function customGuest() {
+    var params = new URLSearchParams(window.location.search);
+    var name = (params.get("name") || "").trim();
+    var greet = (params.get("greet") || "").trim();
+    if (!name && !greet) return null;
+    return { title: "", name: name || DEFAULT_GUEST.name, companion: "", prefix: greet };
   }
 
   function greetingFor(guest) {
     if (guest.greeting) return guest.greeting;
-    var parts = ["Kính mời"];
+    var parts = [guest.prefix || "Kính mời"];
     if (guest.title) parts.push(guest.title);
     parts.push(guest.name);
     if (guest.companion) parts.push(guest.companion);

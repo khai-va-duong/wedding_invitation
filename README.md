@@ -112,9 +112,16 @@ This creates a real `for/<slug>/index.html` file per guest (see "How personalize
 links + link previews work" below) — commit and push these generated files along with
 your `data/guests.js` change, or the new/edited guest links won't be live yet.
 
-Open **`admin.html`** (e.g. `https://yoursite.com/admin.html`) after publishing to get a
+Open **`admin.html`** (e.g. `https://yoursite.com/admin`) after publishing to get a
 copy-paste list of every guest's full link — handy for sending out invites. This page is
 for you, the organizer; there's no need to share it with guests.
+
+The same page also builds **ad-hoc links** without editing any file: pick Nhà Trai or
+Nhà Gái, type a guest name and (optionally) a welcome phrase, and copy the link, e.g.
+`/nha-gai/?greet=Thân mời&name=chị Lan` → "Thân mời chị Lan". Blank fields fall back to
+the defaults ("Kính mời" / "Quý khách"), and the plain link still shows "Kính mời Quý
+khách". Because these are resolved in the browser, the Zalo/Messenger preview card shows
+the generic title; add the guest to `data/guests.js` when the preview text matters.
 
 ### How personalized links + link previews work
 
