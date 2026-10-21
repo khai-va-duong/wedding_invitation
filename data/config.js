@@ -67,7 +67,7 @@ window.SITE_CONFIG = {
     heading: "Thư Mời Cưới",
     line1: "TRÂN TRỌNG KÍNH MỜI",
     line2: "ĐẾN DỰ BỮA TIỆC THÂN MẬT MỪNG LỄ THÀNH HÔN",
-    line3: "CỦA HAI CON CHÚNG TÔI",
+    line3: "CỦA HAI CHÚNG TÔI",
     closing: "Rất hân hạnh được đón tiếp!",
   },
 

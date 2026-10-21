@@ -56,14 +56,15 @@ const DEFAULT_DESC = "đến dự buổi tiệc chung vui cùng gia đình";
 
 const template = fs.readFileSync(path.join(ROOT, "index.html"), "utf8");
 
-// Guest pages live two levels deep (for/<slug>/index.html), so relative
-// asset/data references need a "../../" prefix. The root template only ever
-// references these two prefixes, so plain string replacement is safe.
-function rewriteForSubdir(html) {
+// Guest pages live two levels deep (for/<slug>/index.html) and the bride-side
+// page one level deep (nha-gai/index.html), so relative asset/data references
+// need a "../../" or "../" prefix. The root template only ever references
+// these two prefixes, so plain string replacement is safe.
+function rewriteForSubdir(html, prefix) {
   return html
-    .split('href="assets/').join('href="../../assets/')
-    .split('src="assets/').join('src="../../assets/')
-    .split('src="data/').join('src="../../data/');
+    .split('href="assets/').join('href="' + prefix + 'assets/')
+    .split('src="assets/').join('src="' + prefix + 'assets/')
+    .split('src="data/').join('src="' + prefix + 'data/');
 }
 
 // Two guests with the same slug would silently overwrite each other's page.
@@ -79,7 +80,7 @@ GUESTS.forEach((guest) => {
   const title = [seo.titlePrefix, shortLabelFor(guest), seo.titleSuffix].filter(Boolean).join(" ");
   const description = seo.subtitle || DEFAULT_DESC;
 
-  let html = rewriteForSubdir(template);
+  let html = rewriteForSubdir(template, "../../");
   html = html.split(DEFAULT_TITLE).join(escapeHtml(title));
   html = html.split(DEFAULT_DESC).join(escapeHtml(description));
   if (seo.image) {
@@ -94,3 +95,15 @@ GUESTS.forEach((guest) => {
 });
 
 console.log(`\nGenerated ${written} personalized page(s).`);
+
+// Bride-side (Nhà Gái) invitation: the same page plus data/config-bride.js,
+// which overrides the event, letter wording, name order and gift QR.
+const CONFIG_TAG = '<script src="data/config.js"></script>';
+if (!template.includes(CONFIG_TAG)) throw new Error("index.html no longer loads data/config.js");
+const brideHtml = rewriteForSubdir(
+  template.replace(CONFIG_TAG, CONFIG_TAG + '\n<script src="data/config-bride.js"></script>'),
+  "../"
+);
+fs.mkdirSync(path.join(ROOT, "nha-gai"), { recursive: true });
+fs.writeFileSync(path.join(ROOT, "nha-gai", "index.html"), brideHtml);
+console.log("Generated nha-gai/index.html (bride-side invitation).");

@@ -193,8 +193,17 @@
       : firstStr + " - " + lastStr + "." + last.getFullYear();
   }
 
+  // [first, second] by each person's `order` — the groom-side page lists the
+  // groom first, the bride-side page (data/config-bride.js) the bride.
+  function orderedCouple(groom, bride) {
+    return [groom, bride].sort(function (a, b) { return (a.order || 0) - (b.order || 0); });
+  }
+
   function renderFamilyPanel(groom, bride) {
     var grid = document.getElementById("family-grid");
+    var people = orderedCouple(groom, bride);
+    document.getElementById("family-side-a").textContent = people[0] === groom ? "Nhà Trai" : "Nhà Gái";
+    document.getElementById("family-side-b").textContent = people[1] === groom ? "Nhà Trai" : "Nhà Gái";
     function col(p) {
       return (
         '<div class="family-col">' +
@@ -204,7 +213,7 @@
         "</div>"
       );
     }
-    grid.innerHTML = col(groom) + col(bride);
+    grid.innerHTML = col(people[0]) + col(people[1]);
   }
 
   // Wraps each character in a span so the names can "write themselves" in,
@@ -216,15 +225,18 @@
   }
 
   function renderHero(groom, bride) {
+    var people = orderedCouple(groom, bride);
+    var first = people[0];
+    var second = people[1];
     var photos = CONFIG.photos || {};
     var heroPhoto = document.getElementById("hero-photo");
     if (photos.hero) heroPhoto.src = photoUrl(photos.hero, "web");
-    heroPhoto.alt = groom.name + " " + CONFIG.couple.separator + " " + bride.name;
+    heroPhoto.alt = first.name + " " + CONFIG.couple.separator + " " + second.name;
 
     document.getElementById("hero-names").innerHTML =
-      '<span class="hero-name">' + letterSpans(groom.name, 0) + "</span>" +
+      '<span class="hero-name">' + letterSpans(first.name, 0) + "</span>" +
       '<span class="hero-ampersand">' + escapeHtml(CONFIG.couple.separator) + "</span>" +
-      '<span class="hero-name">' + letterSpans(bride.name, groom.name.length + 2) + "</span>";
+      '<span class="hero-name">' + letterSpans(second.name, first.name.length + 2) + "</span>";
     document.getElementById("hero-tagline").textContent = CONFIG.couple.tagline || "";
     document.getElementById("hero-date").textContent = formatDate(CONFIG.wedding.date);
     document.getElementById("hero-lunar").textContent = CONFIG.wedding.lunarDate || "";
@@ -253,7 +265,7 @@
   }
 
   function renderCouple(groom, bride) {
-    var people = [groom, bride].sort(function (a, b) { return (a.order || 0) - (b.order || 0); });
+    var people = orderedCouple(groom, bride);
     var coupleGrid = document.getElementById("couple-grid");
     coupleGrid.innerHTML = "";
     people.forEach(function (p, idx) {
@@ -273,7 +285,8 @@
     var guest = resolveGuest();
     var groom = CONFIG.couple.groom;
     var bride = CONFIG.couple.bride;
-    var coupleNames = groom.name + " " + CONFIG.couple.separator + " " + bride.name;
+    var people = orderedCouple(groom, bride);
+    var coupleNames = people[0].name + " " + CONFIG.couple.separator + " " + people[1].name;
     var mainDate = new Date(CONFIG.wedding.date);
 
     updateSeo(guest);
@@ -306,7 +319,9 @@
     document.querySelector("#letter-section .invite-heading").textContent = invite.heading || "Thư Mời Cưới";
     document.getElementById("invite-rings").innerHTML = ICONS.rings;
     document.getElementById("invite-names").innerHTML =
-      groom.name + '<span class="invite-heart">&hearts;</span>' + bride.name;
+      '<span class="invite-name">' + escapeHtml(people[0].name) + "</span>" +
+      '<span class="invite-heart">&hearts;</span>' +
+      '<span class="invite-name">' + escapeHtml(people[1].name) + "</span>";
     document.getElementById("invite-body").innerHTML =
       (invite.line1 || "TRÂN TRỌNG KÍNH MỜI") +
       '<span class="invite-guest">' + escapeHtml(guestPhraseFor(guest)) + "</span>" +
@@ -371,7 +386,7 @@
       '<div class="gift-owner">' + ownerName + "</div>" +
       '<div class="gift-bank">' + gift.bankName + "</div>" +
       '<div class="gift-account">' + gift.accountNumber + "</div>" +
-      '<div class="gift-holder">' + gift.accountName + "</div>" +
+      (gift.accountName ? '<div class="gift-holder">' + gift.accountName + "</div>" : "") +
       '<div class="gift-actions">' +
         '<button class="btn-copy" data-copy="' + gift.accountNumber + '">Sao chép STK</button>' +
         (gift.qr && LABELS.saveQr
