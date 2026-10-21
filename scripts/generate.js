@@ -66,6 +66,13 @@ function rewriteForSubdir(html) {
     .split('src="data/').join('src="../../data/');
 }
 
+// Two guests with the same slug would silently overwrite each other's page.
+const seen = new Set();
+GUESTS.forEach((guest) => {
+  if (seen.has(guest.slug)) throw new Error(`Duplicate slug in data/guests.js: "${guest.slug}"`);
+  seen.add(guest.slug);
+});
+
 let written = 0;
 GUESTS.forEach((guest) => {
   const seo = CONFIG.seo || {};
@@ -75,6 +82,9 @@ GUESTS.forEach((guest) => {
   let html = rewriteForSubdir(template);
   html = html.split(DEFAULT_TITLE).join(escapeHtml(title));
   html = html.split(DEFAULT_DESC).join(escapeHtml(description));
+  if (seo.image) {
+    html = html.replace(/(<meta property="og:image" content=")[^"]*(")/, "$1" + escapeHtml(seo.image) + "$2");
+  }
 
   const outDir = path.join(ROOT, "for", guest.slug);
   fs.mkdirSync(outDir, { recursive: true });

@@ -11,8 +11,8 @@ window.SITE_CONFIG = {
       father: "Nguyễn Văn Khoa",
       mother: "Trần Thị Hoa",
       address: "SN 130A Đặng Quang - TDP 5, P. Quang Trung - Thanh Hóa",
-      // Replace with your own photo (a hosted URL, or a local file under assets/img/)
-      photo: "https://images.unsplash.com/photo-1553455274-5297e1a79c49?w=400&h=400&q=80&auto=format&fit=crop",
+      // A photo name from assets/img (e.g. "DSC_7455"), a local path, or a full URL — see "photos" below.
+      photo: "DSC_7455",
       quote: "Khoảnh khắc gặp được em, anh đã quyết định sẽ cùng em đi đến hết cuộc đời.",
       order: 1, // shown first
     },
@@ -23,8 +23,7 @@ window.SITE_CONFIG = {
       father: "Lê Văn Sơn",
       mother: "Phạm Thị Lan",
       address: "Thôn Thanh Vòng, Xã Thanh Vân - Bắc Ninh",
-      // Replace with your own photo (a hosted URL, or a local file under assets/img/)
-      photo: "https://images.unsplash.com/photo-1766416143515-302f0e5ccbee?w=400&h=400&q=80&auto=format&fit=crop",
+      photo: "DSC_7510",
       quote: "Giữa thế gian huyên náo, anh là lý do để em mỉm cười mỗi ngày.",
       order: 2,
     },
@@ -81,33 +80,68 @@ window.SITE_CONFIG = {
     line3: "CHUNG VUI CÙNG GIA ĐÌNH CHÚNG TÔI!",
   },
 
-  // Replace with your own wedding photos (hosted URLs, or local files under
-  // assets/img/) once you have them — these are real placeholder photography
-  // (Unsplash, free to use) so the page looks finished in the meantime.
+  /*
+   * Photos. Anywhere a photo is configured you can write either:
+   *   - a bare name like "DSC_6854"  -> uses assets/img/thumb/DSC_6854.jpg for
+   *     small views and assets/img/web/DSC_6854.jpg for large ones (both made
+   *     by scripts/optimize-images.ps1 from the original assets/img/DSC_6854.JPG)
+   *   - a local path ("assets/img/foo.jpg") or a full URL, used as-is.
+   */
+  photos: {
+    cover: "DSC_6957",  // blurred backdrop behind the envelope (and on wide screens)
+    hero: "DSC_6854",   // full-screen opening photo
+    footer: "DSC_7988", // closing "thank you" photo
+  },
+
+  // Full-width photo pauses between sections — one per photo set ("chapter").
+  interludes: [
+    { photo: "DSC_7007", chapter: "Chương I · Ánh Sáng", quote: "Có những cái nắm tay, là để không bao giờ buông." },
+    { photo: "DSC_7356", chapter: "Chương II · Sắc Đỏ", quote: "Hỷ sự đến nhà, đỏ thắm một lời hẹn ước trăm năm." },
+    { photo: "DSC_7674", chapter: "Chương III · Tinh Khôi", quote: "Em là điệu nhạc dịu dàng nhất anh từng nghe." },
+    { photo: "DSC_7917", chapter: "Chương IV · Dịu Dàng", quote: "Cảm ơn em đã đến, và đã ở lại." },
+  ],
+
+  // The album, grouped into chapters (shown as tabs). Add/remove freely.
   gallery: [
-    "https://images.unsplash.com/photo-1596457221755-b96bc3a6df18?w=700&h=700&q=80&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1717578899442-7a9e55267903?w=700&h=700&q=80&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1595919994909-0f80404101dd?w=700&h=700&q=80&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1718183442384-921bf92d2edf?w=700&h=700&q=80&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1721401870202-8e2264ecced2?w=700&h=700&q=80&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1563476241873-3a74ddd9fa4c?w=700&h=700&q=80&auto=format&fit=crop",
+    {
+      title: "Ánh Sáng",
+      caption: "Nơi những ô cửa kính đón nắng, chúng mình bắt đầu câu chuyện.",
+      photos: ["DSC_6809", "DSC_6854", "DSC_6798", "DSC_6824", "DSC_6857", "DSC_6916", "DSC_6945", "DSC_6957", "DSC_7007", "DSC_7053", "DSC_7072"],
+    },
+    {
+      title: "Sắc Đỏ",
+      caption: "Áo dài đỏ thắm, chữ Hỷ song đôi — lời hẹn của hai gia đình.",
+      photos: ["DSC_7229", "DSC_7250", "DSC_7308", "DSC_7331", "DSC_7356", "DSC_7414"],
+    },
+    {
+      title: "Tinh Khôi",
+      caption: "Trắng trong như ngày đầu, nhẹ nhàng như hoa.",
+      photos: ["DSC_7518", "DSC_7455", "DSC_7510", "DSC_7525", "DSC_7540", "DSC_7642", "DSC_7674", "DSC_7721", "DSC_7748", "DSC_7775"],
+    },
+    {
+      title: "Dịu Dàng",
+      caption: "Một chút hồng, một chút ngại ngùng, và rất nhiều yêu thương.",
+      photos: ["DSC_7849", "DSC_7792", "DSC_7856", "DSC_7862", "DSC_7885", "DSC_7894", "DSC_7915", "DSC_7917", "DSC_7939", "DSC_7965", "DSC_7987", "DSC_7988", "DSC_8092"],
+    },
   ],
 
   gift: {
     intro: "Sự hiện diện của quý khách là niềm vinh hạnh cho gia đình chúng tôi. Nếu quý khách muốn gửi lời chúc phúc bằng một món quà nhỏ, chúng tôi xin trân trọng đón nhận qua thông tin bên dưới.",
-    // QR codes are generated automatically from bankName/accountNumber/accountName
-    // below (see qrUrlFor() in assets/js/app.js) — edit those fields and the QR
-    // updates itself, no image file to replace.
+    // `qr` is the bank app's own VietQR image. Without it, a plain QR is
+    // generated from bankName/accountNumber/accountName (see qrUrlFor() in
+    // assets/js/app.js). Remove an entry entirely to hide that card.
     groom: {
       bankName: "Vietcombank",
-      accountName: "NGUYEN QUANG KHAI",
-      accountNumber: "0123456789",
+      accountName: "TO QUANG KHAI",
+      accountNumber: "1017741150",
+      qr: "assets/img/qr_code.jpg",
     },
-    bride: {
-      bankName: "Techcombank",
-      accountName: "LE ABC DUONG",
-      accountNumber: "9876543210",
-    },
+  },
+
+  // Short interface labels that are not part of the content above.
+  labels: {
+    saveQr: "Lưu mã QR",
+    wishSent: "Cảm ơn lời chúc của bạn!",
   },
 
   music: {
@@ -133,7 +167,9 @@ window.SITE_CONFIG = {
     defaultGuestLabel: "bạn",
     // Link-preview description/subtitle, same for every guest
     subtitle: "đến dự buổi tiệc chung vui cùng gia đình",
-    // Shown as the thumbnail when the link is shared on Zalo/Facebook/Messenger
-    image: "https://images.unsplash.com/photo-1596457221755-b96bc3a6df18?w=1200&h=630&q=80&auto=format&fit=crop",
+    // Shown as the thumbnail when the link is shared on Zalo/Facebook/Messenger.
+    // Must be an absolute URL (crawlers don't resolve relative ones); it is
+    // baked into every page by scripts/generate.js.
+    image: "https://khai-va-duong.github.io/wedding_invitation/assets/img/web/og-cover.jpg",
   },
 };

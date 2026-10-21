@@ -23,28 +23,37 @@ explaining every field.
 
 ### Photos & gallery
 
-`data/config.js` currently points `couple.groom.photo`, `couple.bride.photo`,
-`gallery`, and `seo.image` at real (free-to-use, Unsplash) wedding photography, so the
-site looks finished out of the box. Replace them with your own:
+The original camera photos live in `assets/img/DSC_*.JPG` (3–14 MB each, git-ignored).
+The site never loads those directly — it uses optimized copies made by:
 
-- Easiest: upload your photos anywhere that gives you a direct image URL (e.g. an
-  Imgur/Cloudinary link, or a photo host of your choice) and paste that URL in.
-- Or: put files under `assets/img/` (e.g. `assets/img/groom.jpg`) and point the config
-  field at `assets/img/groom.jpg` instead of a URL — both local paths and full URLs
-  work anywhere an image is referenced in `data/config.js`.
-- `gallery` is an array — add/remove entries freely, the album grid follows its length.
-- `seo.image` is the thumbnail shown when the link is shared on Zalo/Facebook/Messenger
-  (1200×630 recommended).
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts/optimize-images.ps1
+```
+
+which writes `assets/img/web/<name>.jpg` (1600px, backgrounds/lightbox),
+`assets/img/thumb/<name>.jpg` (640px, gallery grid) and `assets/img/web/og-cover.jpg`
+(1200×630 link-preview crop). It applies EXIF rotation and strips all metadata (GPS,
+camera info). Existing outputs are skipped, so delete a file to rebuild it. Commit the
+`web/` and `thumb/` folders.
+
+In `data/config.js`, refer to a photo by its bare name (e.g. `"DSC_6854"`); a local
+path or full URL also works anywhere a photo is configured:
+
+- `photos.cover` / `photos.hero` / `photos.footer` — envelope backdrop, opening photo,
+  closing "thank you" photo.
+- `interludes` — the four full-width photo pauses between sections, one per photo set.
+- `gallery` — chapters (shown as tabs), each with a title, caption and photo list. The
+  first photo of each chapter is shown large.
+- `couple.groom.photo` / `couple.bride.photo` — the arched portraits.
+- `seo.image` — absolute URL of the link-preview thumbnail, baked into every page by
+  `npm run generate`.
 
 ### Gift QR codes
 
-QR codes are **generated automatically** (via the free api.qrserver.com service) from
-`gift.groom` / `gift.bride`'s `bankName`, `accountNumber`, and `accountName` in
-`data/config.js` — there's no QR image to create or replace. Edit those three fields and
-the QR on the page updates itself to match. If you'd rather use your bank app's own
-official VietQR image instead, add a `qr: "assets/img/your-file.png"` (or a URL) field
-to that gift entry — `qrUrlFor()` in `assets/js/app.js` falls back to generating one
-only when `qr` isn't set.
+`gift.groom.qr` points at `assets/img/qr_code.jpg` — the bank app's own VietQR image —
+and the card also offers a "Lưu mã QR" download button. A gift entry without `qr`
+falls back to a plain QR generated from `bankName` / `accountNumber` / `accountName`
+(via api.qrserver.com). Remove an entry (e.g. `gift.bride`) to hide that card entirely.
 
 ### Background music
 
@@ -125,7 +134,7 @@ personalized preview card — only the generic default title/description.
 > GitHub Pages only serves static files. `404.html` catches any unknown path and
 > forwards it to `index.html`, which restores the original URL and renders the right
 > guest client-side — a standard technique for client-side routing on GitHub Pages.
-> It also transparently handles the repo's subpath (e.g. `/To_quang_khai_wedding/`), so
+> It also transparently handles the repo's subpath (e.g. `/wedding_invitation/`), so
 > you don't need to configure anything for it to work.
 
 ## 3. RSVP / wishes
@@ -151,9 +160,9 @@ python -m http.server 8080
 
 ## 5. Deploy to GitHub Pages
 
-This repo is published at **https://github.com/ntuan7059/To_quang_khai_wedding**, live at:
+This repo is published at **https://github.com/khai-va-duong/wedding_invitation**, live at:
 
-**https://ntuan7059.github.io/To_quang_khai_wedding/**
+**https://khai-va-duong.github.io/wedding_invitation/**
 
 (No custom domain — GitHub Pages project URLs are always `<username>.github.io/<repo>`;
 the username can't be dropped without either a custom domain or renaming the GitHub
@@ -190,7 +199,8 @@ data/config.js          couple, wedding, gift, music, SEO, calendar/quote/forewo
 data/guests.js          guest list for personalized links
 assets/css/style.css    all styling & animations (white/cream base, maroon + gold accents)
 assets/js/app.js        rendering, countdown, calendar, envelope, music, gallery, QR, icons
-assets/img/             favicon only — every photo and background texture is a hosted URL
+assets/img/             favicon, qr_code.jpg, web/ + thumb/ optimized photos (originals git-ignored)
+scripts/optimize-images.ps1  builds web/ + thumb/ + og-cover.jpg from the original photos
 assets/audio/           background-music.mp3
 ```
 
@@ -200,9 +210,6 @@ assets/audio/           background-music.mp3
   Vietnamese "thiệp cưới online" invitation format (envelope intro, music, countdown,
   gallery, gift QR, wishes wall) — it does not reuse code or assets from any specific
   existing invitation site.
-- Couple/gallery photos ship pointing at real Unsplash photography (free to use) so the
-  page looks finished immediately; swap them for your own before sharing the link with
-  guests (see "Photos & gallery" above).
 - Icons (calendar, map pin, music note, the small flourish in "Nhà Trai ⟡ Nhà Gái") are
   hand-rolled inline SVGs in `assets/js/app.js` (the `ICONS` object) rather than emoji,
   so they render identically everywhere instead of depending on the visitor's device

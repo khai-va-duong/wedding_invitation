@@ -1,3 +1,8 @@
 .DS_Store
 Thumbs.db
 node_modules/
+
+# Original camera photos (3-14 MB each). The site only uses the optimized
+# copies in assets/img/web and assets/img/thumb (scripts/optimize-images.ps1).
+assets/img/DSC_*.JPG
+assets/img/DSC_*.jpg

@@ -37,6 +37,7 @@
     row.innerHTML =
       '<div>' +
         '<div class="greet">' + greetingFor(guest) + '</div>' +
+        (guest.note ? '<div class="url">' + guest.note + '</div>' : '') +
         '<div class="url">' + url + '</div>' +
       '</div>' +
       '<button type="button">Sao chép</button>';
