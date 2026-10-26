@@ -151,13 +151,7 @@ window.SITE_CONFIG = {
   },
 
   seo: {
-    // Link-preview title becomes: "{titlePrefix} {guest title + name} {titleSuffix}"
-    // e.g. "Thân mời chị Liên | Ngày chung đôi"
-    titlePrefix: "Thân mời",
-    titleSuffix: "| Ngày chung đôi",
-    defaultGuestLabel: "bạn",
-    // Link-preview description/subtitle, same for every guest
-    subtitle: "đến dự buổi tiệc chung vui cùng gia đình",
+    // The link-preview title itself lives in index.html's <head>.
     // Shown as the thumbnail when the link is shared on Zalo/Facebook/Messenger.
     // Must be an absolute URL (crawlers don't resolve relative ones); it is
     // baked into every page by scripts/generate.js.

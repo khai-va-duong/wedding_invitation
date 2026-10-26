@@ -1,20 +1,18 @@
 #!/usr/bin/env node
 /**
- * Generates a real static page per guest at for/<slug>/index.html, with the
- * correct <title> / og:title / og:description baked directly into the HTML.
+ * Generates a real static page per guest at for/<slug>/index.html, so the
+ * /for/<slug> links resolve directly (no 404.html redirect hop) and serve the
+ * link-preview <title> / og:title / og:image baked into index.html.
  *
  * Why this is needed: link-preview crawlers (Zalo, Facebook, Messenger,
- * Telegram...) do not execute JavaScript, so a purely client-side-rendered
- * greeting (like the on-page one) never shows up in a shared link's preview
- * card. Baking it into real per-guest HTML files fixes that, while staying
- * 100% static and GitHub-Pages-friendly.
+ * Telegram...) do not execute JavaScript and do not follow the 404.html
+ * redirect, so the preview card only works from real HTML files.
  *
  * Run this again any time you edit data/guests.js, then commit the result:
  *   node scripts/generate.js
  *
  * Guests that are NOT in data/guests.js still work via the 404.html
- * redirect trick (see README.md) — they just won't have a personalized
- * link-preview title, only the generic default.
+ * redirect trick or an ad-hoc ?moi=... link (see README.md).
  */
 const fs = require("fs");
 const path = require("path");
@@ -44,16 +42,6 @@ function escapeHtml(str) {
     .replace(/"/g, "&quot;");
 }
 
-function shortLabelFor(guest) {
-  const parts = [];
-  if (guest.title) parts.push(guest.title);
-  parts.push(guest.name);
-  return parts.join(" ").trim();
-}
-
-const DEFAULT_TITLE = "Thân mời bạn | Ngày chung đôi";
-const DEFAULT_DESC = "đến dự buổi tiệc chung vui cùng gia đình";
-
 const template = fs.readFileSync(path.join(ROOT, "index.html"), "utf8");
 
 // Guest pages live two levels deep (for/<slug>/index.html) and the bride-side
@@ -77,12 +65,7 @@ GUESTS.forEach((guest) => {
 let written = 0;
 GUESTS.forEach((guest) => {
   const seo = CONFIG.seo || {};
-  const title = [seo.titlePrefix, shortLabelFor(guest), seo.titleSuffix].filter(Boolean).join(" ");
-  const description = seo.subtitle || DEFAULT_DESC;
-
   let html = rewriteForSubdir(template, "../../");
-  html = html.split(DEFAULT_TITLE).join(escapeHtml(title));
-  html = html.split(DEFAULT_DESC).join(escapeHtml(description));
   if (seo.image) {
     html = html.replace(/(<meta property="og:image" content=")[^"]*(")/, "$1" + escapeHtml(seo.image) + "$2");
   }
@@ -91,7 +74,7 @@ GUESTS.forEach((guest) => {
   fs.mkdirSync(outDir, { recursive: true });
   fs.writeFileSync(path.join(outDir, "index.html"), html);
   written++;
-  console.log(`  for/${guest.slug}/index.html  ->  "${title}"`);
+  console.log(`  for/${guest.slug}/index.html`);
 });
 
 console.log(`\nGenerated ${written} personalized page(s).`);

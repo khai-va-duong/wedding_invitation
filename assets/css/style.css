@@ -1732,6 +1732,10 @@ h1, h2, h3 { font-family: var(--font-heading); margin: 0; color: var(--color-pri
 @media (max-width: 539px) {
   .invite-name { display: block; }
   .invite-heart { display: block; width: max-content; margin: 2px auto; }
+  .foreword-sign { text-align: center; line-height: 1.2; }
+  .foreword-sign .sign-name,
+  .foreword-sign .sign-amp { display: block; }
+  .foreword-sign .sign-amp { font-size: 0.7em; }
 }
 
 @media (max-width: 360px) {

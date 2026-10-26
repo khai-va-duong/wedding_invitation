@@ -81,15 +81,38 @@
     return customGuest() || DEFAULT_GUEST;
   }
 
-  // Ad-hoc guest from ?name=<guest name>&greet=<welcome phrase>, built on
-  // admin.html — for guests who aren't in data/guests.js. Either part may be
-  // left out; the defaults ("Quý khách", "Kính mời") fill the gap.
+  // Honorifics that may lead an ad-hoc guest name ("Chị Nguyễn Thị A").
+  var HONORIFICS = ["anh", "chị", "em", "cô", "chú", "bác", "ông", "bà", "dì", "cậu", "mợ", "thím", "bạn"];
+
+  // Splits "Chị Nguyễn Thị A" into title "chị" + name "Nguyễn Thị A", so the
+  // honorific reads lowercase mid-sentence ("Trân trọng kính mời chị ...").
+  function guestFromLabel(label) {
+    var words = label.split(/\s+/).filter(Boolean);
+    var titles = [];
+    while (words.length > 1 && HONORIFICS.indexOf(words[0].toLowerCase()) !== -1) {
+      titles.push(words.shift().toLowerCase());
+    }
+    return { title: titles.join(" "), name: words.join(" "), companion: "" };
+  }
+
+  // Ad-hoc guest for people who aren't in data/guests.js, built on
+  // admin.html as a readable link: ?moi=Chị-Nguyễn-Thị-A (dashes or "+"
+  // stand for spaces). The older ?name=<name>&greet=<phrase> form still works.
   function customGuest() {
     var params = new URLSearchParams(window.location.search);
+    var label = (params.get("moi") || "").replace(/-/g, " ").trim();
+    if (label) return guestFromLabel(label);
+
     var name = (params.get("name") || "").trim();
     var greet = (params.get("greet") || "").trim();
     if (!name && !greet) return null;
-    return { title: "", name: name || DEFAULT_GUEST.name, companion: "", prefix: greet };
+    var guest = name ? guestFromLabel(name) : { title: "", name: DEFAULT_GUEST.name, companion: "" };
+    if (!greet) return guest;
+    // Old links often put just the honorific in ?greet= (greet=Chị&name=Nguyễn Thị A).
+    var greetIsTitle = greet.split(/\s+/).every(function (w) { return HONORIFICS.indexOf(w.toLowerCase()) !== -1; });
+    if (greetIsTitle && name) guest.title = [greet.toLowerCase(), guest.title].filter(Boolean).join(" ");
+    else guest.prefix = greet;
+    return guest;
   }
 
   function greetingFor(guest) {
@@ -110,27 +133,6 @@
     parts.push(guest.name);
     if (guest.companion) parts.push(guest.companion);
     return parts.join(" ");
-  }
-
-  // Short "{title} {name}" label used in the shareable link's title/preview,
-  // e.g. "chị Liên" — distinct from the fuller on-page greeting above.
-  function shortLabelFor(guest) {
-    var parts = [];
-    if (guest.title) parts.push(guest.title);
-    parts.push(guest.name);
-    var label = parts.join(" ").trim();
-    return label || (CONFIG.seo && CONFIG.seo.defaultGuestLabel) || "bạn";
-  }
-
-  function updateSeo(guest) {
-    var seo = CONFIG.seo || {};
-    var title = [seo.titlePrefix, shortLabelFor(guest), seo.titleSuffix].filter(Boolean).join(" ");
-    var description = seo.subtitle || "";
-    document.querySelectorAll('[data-seo="title"]').forEach(function (n) { n.textContent = title; });
-    document.querySelectorAll('[data-seo="og:title"]').forEach(function (n) { n.setAttribute("content", title); });
-    document.querySelectorAll('[data-seo="description"], [data-seo="og:description"]').forEach(function (n) {
-      n.setAttribute("content", description);
-    });
   }
 
   /* ------------------------------------------------------------------ *
@@ -302,8 +304,6 @@
     var coupleNames = people[0].name + " " + CONFIG.couple.separator + " " + people[1].name;
     var mainDate = new Date(CONFIG.wedding.date);
 
-    updateSeo(guest);
-
     // Envelope
     document.getElementById("envelope-greeting").textContent = greetingFor(guest);
     document.getElementById("envelope-names").textContent = coupleNames;
@@ -323,7 +323,11 @@
     // Foreword
     var forewordEl = document.getElementById("foreword-text");
     forewordEl.innerHTML = (CONFIG.foreword || []).map(function (p) { return "<p>" + p + "</p>"; }).join("");
-    document.getElementById("foreword-sign").textContent = coupleNames;
+    // Separate spans so narrow screens can stack them: name / & / name.
+    document.getElementById("foreword-sign").innerHTML =
+      '<span class="sign-name">' + escapeHtml(people[0].name) + "</span> " +
+      '<span class="sign-amp">' + escapeHtml(CONFIG.couple.separator) + "</span> " +
+      '<span class="sign-name">' + escapeHtml(people[1].name) + "</span>";
 
     // Family info + personalized invitation letter
     renderDateRange();

@@ -11,18 +11,16 @@
 <body style="background:#fff">
 <div class="admin-wrap">
   <h1>Tạo link mời khách</h1>
-  <p>Trang này chỉ dành cho người tổ chức. Nhập tên khách và lời mời để tạo link riêng —
-     không cần sửa file. Để trống thì thiệp hiển thị mặc định "Kính mời Quý khách".</p>
+  <p>Trang này chỉ dành cho người tổ chức. Nhập danh xưng và tên khách (ví dụ "Chị Nguyễn Thị A")
+     để tạo link riêng — không cần sửa file. Để trống thì thiệp hiển thị mặc định "Kính mời Quý khách".</p>
 
   <form class="admin-builder" id="builder">
     <div class="admin-sides" role="radiogroup" aria-label="Thiệp của nhà">
       <label><input type="radio" name="side" value="" checked> Nhà Trai</label>
       <label><input type="radio" name="side" value="nha-gai/"> Nhà Gái</label>
     </div>
-    <label for="greet">Lời mời</label>
-    <input type="text" id="greet" placeholder="Kính mời" autocomplete="off">
-    <label for="name">Tên khách</label>
-    <input type="text" id="name" placeholder="Quý khách" autocomplete="off">
+    <label for="name">Khách mời (danh xưng + tên)</label>
+    <input type="text" id="name" placeholder="Chị Nguyễn Thị A" autocomplete="off">
     <div class="admin-preview" id="preview"></div>
     <div class="admin-row">
       <div class="url" id="link"></div>
@@ -59,26 +57,36 @@
 
   var base = window.location.origin + window.location.pathname.replace(/admin(\.html)?$/, "");
 
-  // Custom link builder: ?name=&greet= are read by resolveGuest() in app.js.
+  // Custom link builder: ?moi=Chị-Nguyễn-Thị-A is read by customGuest() in
+  // app.js. Letters (with Vietnamese marks) are left unencoded so the link
+  // stays readable when pasted into Zalo/Messenger; spaces become dashes.
+  var HONORIFICS = ["anh", "chị", "em", "cô", "chú", "bác", "ông", "bà", "dì", "cậu", "mợ", "thím", "bạn"];
   var form = document.getElementById("builder");
   var nameInput = document.getElementById("name");
-  var greetInput = document.getElementById("greet");
   var linkEl = document.getElementById("link");
   var openEl = document.getElementById("open");
   var currentLink = "";
 
+  function readableParam(label) {
+    return label.split(/\s+/).join("-").replace(/[&#%?+=]/g, encodeURIComponent);
+  }
+
+  // Mirrors guestFromLabel() in app.js: leading honorifics read lowercase.
+  function inviteLine(label) {
+    var words = label.split(/\s+/);
+    for (var i = 0; i < words.length - 1 && HONORIFICS.indexOf(words[i].toLowerCase()) !== -1; i++) {
+      words[i] = words[i].toLowerCase();
+    }
+    return "Trân trọng kính mời " + words.join(" ");
+  }
+
   function updateLink() {
     var side = form.querySelector('input[name="side"]:checked').value;
     var name = nameInput.value.trim();
-    var greet = greetInput.value.trim();
-    var params = new URLSearchParams();
-    if (greet) params.set("greet", greet);
-    if (name) params.set("name", name);
-    var query = params.toString();
-    currentLink = base + side + (query ? "?" + query : "");
+    currentLink = base + side + (name ? "?moi=" + readableParam(name) : "");
     linkEl.textContent = currentLink;
     openEl.href = currentLink;
-    document.getElementById("preview").textContent = (greet || "Kính mời") + " " + (name || "Quý khách");
+    document.getElementById("preview").textContent = name ? inviteLine(name) : "Kính mời Quý khách";
   }
   form.addEventListener("input", updateLink);
   form.addEventListener("submit", function (e) { e.preventDefault(); });
