@@ -124,7 +124,7 @@
     openEl.href = currentLink;
     var preview = document.getElementById("preview");
     preview.textContent = (name ? inviteLine(name) : "Trân trọng kính mời Quý khách") + "\n" +
-      (bodyLines().join("\n") || DEFAULT_BODY[side]);
+      (bodyLines().join("\n") || DEFAULT_BODY[side]).toLocaleUpperCase("vi");
   }
   form.addEventListener("input", updateLink);
   form.addEventListener("submit", function (e) { e.preventDefault(); });

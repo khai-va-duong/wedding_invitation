@@ -37,7 +37,7 @@ window.SITE_CONFIG = {
     // ISO date used by the countdown timer
     date: "2026-11-15T10:00:00+07:00",
     lunarDate: "Tức ngày 07 tháng 10 năm Bính Ngọ",
-    hashtag: "#QuangKhaiVaDuong2026",
+    hashtag: "#Khaivaduong",
     // Ceremony timeline, shown as cards in order
     events: [
       {

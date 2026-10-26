@@ -123,7 +123,8 @@
     var match = window.location.search.match(/[?&]loi=([^&#]*)/);
     var lines = (match ? match[1].split("/") : []).map(function (l) {
       try { l = decodeURIComponent(l.replace(/\+/g, " ")); } catch (e) { /* keep as typed */ }
-      return l.replace(/-/g, " ").trim();
+      // Uppercase to match the default config lines ("ĐẾN DỰ BỮA TIỆC ...").
+      return l.replace(/-/g, " ").trim().toLocaleUpperCase("vi");
     }).filter(Boolean);
     return lines.map(escapeHtml).join("<br>");
   }
