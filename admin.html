@@ -21,6 +21,8 @@
     </div>
     <label for="name">Khách mời (danh xưng + tên)</label>
     <input type="text" id="name" placeholder="Chị Nguyễn Thị A" autocomplete="off">
+    <label for="body">Lời mời trong thư (sau tên khách, mỗi dòng một dòng)</label>
+    <textarea id="body" rows="2" autocomplete="off"></textarea>
     <div class="admin-preview" id="preview"></div>
     <div class="admin-row">
       <div class="url" id="link"></div>
@@ -37,6 +39,15 @@
 </div>
 
 <script src="data/config.js"></script>
+<script>
+  // Default letter lines per side, captured before config-bride.js
+  // overrides them (it edits window.SITE_CONFIG in place).
+  var DEFAULT_BODY = { "": [SITE_CONFIG.invite.line2, SITE_CONFIG.invite.line3].join("\n") };
+</script>
+<script src="data/config-bride.js"></script>
+<script>
+  DEFAULT_BODY["nha-gai/"] = [SITE_CONFIG.invite.line2, SITE_CONFIG.invite.line3].join("\n");
+</script>
 <script src="data/guests.js"></script>
 <script>
   function greetingFor(guest) {
@@ -63,12 +74,26 @@
   var HONORIFICS = ["anh", "chị", "em", "cô", "chú", "bác", "ông", "bà", "dì", "cậu", "mợ", "thím", "bạn"];
   var form = document.getElementById("builder");
   var nameInput = document.getElementById("name");
+  var bodyInput = document.getElementById("body");
   var linkEl = document.getElementById("link");
   var openEl = document.getElementById("open");
   var currentLink = "";
+  var currentSide = "";
 
   function readableParam(label) {
-    return label.split(/\s+/).join("-").replace(/[&#%?+=]/g, encodeURIComponent);
+    return label.split(/\s+/).join("-").replace(/[&#%?+=\/]/g, encodeURIComponent);
+  }
+
+  function bodyLines() {
+    return bodyInput.value.split("\n").map(function (l) { return l.trim(); }).filter(Boolean);
+  }
+
+  // ?loi= carries the letter lines only when they differ from the side's
+  // default; "/" separates lines (see customInviteBody() in app.js).
+  function bodyParam(side) {
+    var lines = bodyLines();
+    if (!lines.length || lines.join("\n") === DEFAULT_BODY[side]) return "";
+    return "loi=" + lines.map(readableParam).join("/");
   }
 
   // Mirrors guestFromLabel() in app.js: leading honorifics read lowercase.
@@ -82,11 +107,24 @@
 
   function updateLink() {
     var side = form.querySelector('input[name="side"]:checked').value;
+    // Switching side swaps in that side's default text, unless it was edited.
+    if (side !== currentSide) {
+      if (!bodyInput.value.trim() || bodyLines().join("\n") === DEFAULT_BODY[currentSide]) {
+        bodyInput.value = DEFAULT_BODY[side];
+      }
+      currentSide = side;
+    }
     var name = nameInput.value.trim();
-    currentLink = base + side + (name ? "?moi=" + readableParam(name) : "");
+    var params = [];
+    if (name) params.push("moi=" + readableParam(name));
+    var body = bodyParam(side);
+    if (body) params.push(body);
+    currentLink = base + side + (params.length ? "?" + params.join("&") : "");
     linkEl.textContent = currentLink;
     openEl.href = currentLink;
-    document.getElementById("preview").textContent = name ? inviteLine(name) : "Kính mời Quý khách";
+    var preview = document.getElementById("preview");
+    preview.textContent = (name ? inviteLine(name) : "Trân trọng kính mời Quý khách") + "\n" +
+      (bodyLines().join("\n") || DEFAULT_BODY[side]);
   }
   form.addEventListener("input", updateLink);
   form.addEventListener("submit", function (e) { e.preventDefault(); });

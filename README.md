@@ -120,7 +120,9 @@ The same page also builds **ad-hoc links** without editing any file: pick Nhà T
 Nhà Gái, type the guest's honorific and name, and copy the link, e.g.
 `/?moi=Chị-Nguyễn-Thị-A` → "Kính mời chị Nguyễn Thị A" on the envelope and "Trân trọng
 kính mời chị Nguyễn Thị A" in the letter (a leading honorific is lowercased; dashes stand
-for spaces). The older `?greet=...&name=...` form still works. A blank field gives the
+for spaces). The older `?greet=...&name=...` form still works. The letter text after the
+name ("ĐẾN DỰ BỮA TIỆC ... / CỦA HAI CHÚNG TÔI") can be edited there too; when it differs
+from the default it is added as `&loi=Dòng-1/Dòng-2` ("/" starts a new line). A blank field gives the
 plain link, which shows "Kính mời Quý khách".
 
 ### How personalized links + link previews work

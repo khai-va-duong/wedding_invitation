@@ -115,6 +115,19 @@
     return guest;
   }
 
+  // Letter text after the guest's name, set on admin.html as
+  // ?loi=ĐẾN-DỰ-...-THÀNH-HÔN/CỦA-HAI-CHÚNG-TÔI ("/" = new line, dash = space).
+  // Returns safe HTML, or "" to keep invite.line2/line3 from the config.
+  function customInviteBody() {
+    // Split before decoding, so an encoded "%2F" stays a literal slash.
+    var match = window.location.search.match(/[?&]loi=([^&#]*)/);
+    var lines = (match ? match[1].split("/") : []).map(function (l) {
+      try { l = decodeURIComponent(l.replace(/\+/g, " ")); } catch (e) { /* keep as typed */ }
+      return l.replace(/-/g, " ").trim();
+    }).filter(Boolean);
+    return lines.map(escapeHtml).join("<br>");
+  }
+
   function greetingFor(guest) {
     if (guest.greeting) return guest.greeting;
     var parts = [guest.prefix || "Kính mời"];
@@ -342,8 +355,7 @@
     document.getElementById("invite-body").innerHTML =
       (invite.line1 || "TRÂN TRỌNG KÍNH MỜI") +
       '<span class="invite-guest">' + escapeHtml(guestPhraseFor(guest)) + "</span>" +
-      (invite.line2 || "") +
-      "<br>" + (invite.line3 || "");
+      (customInviteBody() || (invite.line2 || "") + "<br>" + (invite.line3 || ""));
     document.getElementById("invite-closing").textContent = invite.closing || "";
 
     // Events
